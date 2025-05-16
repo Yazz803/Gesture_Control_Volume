@@ -6,6 +6,7 @@ import math
 import subprocess  # For executing osascript
 # import applescript
 import osascript
+from pynput.mouse import Button, Controller
 
 ################################
 wCam, hCam = 100, 100
@@ -14,6 +15,7 @@ wCam, hCam = 100, 100
 cap = cv2.VideoCapture(0)  # Changed to 0, assuming you're using the built-in webcam. Adjust if necessary.
 cap.set(3, wCam)
 cap.set(4, hCam)
+mouse = Controller()
 
 pTime = 0
 prev_volume_set_time = time.time() 
@@ -64,13 +66,13 @@ while True:
 
         cv2.circle(img, (x1, y1), 15, (255, 0, 255), cv2.FILLED)
         cv2.circle(img, (x2, y2), 15, (255, 0, 255), cv2.FILLED)
-        cv2.circle(img, (x3, y3), 15, (255, 0, 255), cv2.FILLED)
-        cv2.circle(img, (x4, y4), 15, (255, 0, 255), cv2.FILLED)
-        cv2.circle(img, (x5, y5), 15, (255, 0, 255), cv2.FILLED)
+        # cv2.circle(img, (x3, y3), 15, (255, 0, 255), cv2.FILLED)
+        # cv2.circle(img, (x4, y4), 15, (255, 0, 255), cv2.FILLED)
+        # cv2.circle(img, (x5, y5), 15, (255, 0, 255), cv2.FILLED)
         cv2.line(img, (x1, y1), (x2, y2), (255, 0, 255), 3)
-        cv2.line(img, (x2, y2), (x3, y3), (255, 0, 255), 3)
-        cv2.line(img, (x3, y3), (x4, y4), (255, 0, 255), 3)
-        cv2.line(img, (x4, y4), (x5, y5), (255, 0, 255), 3)
+        # cv2.line(img, (x2, y2), (x3, y3), (255, 0, 255), 3)
+        # cv2.line(img, (x3, y3), (x4, y4), (255, 0, 255), 3)
+        # cv2.line(img, (x4, y4), (x5, y5), (255, 0, 255), 3)
         cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
 
         length = math.hypot(x2 - x1, y2 - y1)
@@ -85,9 +87,14 @@ while True:
         if time.time() - prev_volume_set_time >= 1:
             # set_volume(volPer)
             prev_volume_set_time = time.time()
-        print(int(length), volPer)
+        # print(int(length), volPer)
+        
+        mouse.position = (x1, y1)
+        print(int(x1), int(y1))
 
         if length < 50:
+            mouse.press(Button.left)
+            mouse.release(Button.left)
             cv2.circle(img, (cx, cy), 15, (0, 255, 0), cv2.FILLED)
 
     # cv2.rectangle(img, (50, 150), (85, 400), (255, 0, 0), 3)
